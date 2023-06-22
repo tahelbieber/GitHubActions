@@ -9,6 +9,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Add Comment
         uses: actions/github-script@v5
         with:
@@ -18,12 +29,14 @@ jobs:
             const { number } = context.issue;
 
             const comment = 'לקבל המשתמש - הערה מתוך קובת YAML';
+            const octokit = github.getOctokit("{{ secrets.GITHUB_TOKEN }}");
             await octokit.issues.createComment({
               owner,
               repo,
               issue_number: number,
               body: comment,
             });
+
 
 
 
