@@ -9,23 +9,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up GitHub context
-        run: echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Add Comment
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { owner, repo } = context.repo;
-            const { number } = context.issue;
+        run: npm install @actions/github-script@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            const comment = 'לקבל המשתמש - הערה מתוך קובת YAML';
-            await octokit.rest.issues.createComment({
-              owner,
-              repo,
-              issue_number: number,
-              body: comment,
-            });
+      - name: Run GitHub Script
+        run: |
+          npx github-script -p "const comment = 'לקבל המשתמש - הערה מתוך קובת YAML'; await github.issues.createComment({owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number, body: comment});"
+
 
 
