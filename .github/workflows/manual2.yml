@@ -20,11 +20,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Add Comment
+      - name: Create Environment File
         run: |
-          echo '::set-env name=COMMENT_BODY::hi'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          echo "COMMENT_BODY=hi" >> $GITHUB_ENV
 
       - name: Post Comment
         run: |
@@ -32,6 +30,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMENT_BODY: ${{ env.COMMENT_BODY }}
+
 
 
 
