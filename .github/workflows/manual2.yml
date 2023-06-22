@@ -21,21 +21,11 @@ jobs:
         run: npm install
 
       - name: Add Comment
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { owner, repo } = context.repo;
-            const { number } = context.issue;
+        run: |
+          echo 'hi' | gh pr comment ${{ github.event.pull_request.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            const comment = 'לקבל המשתמש - הערה מתוך קובת YAML';
-            const github = context.github;
-            await github.issues.createComment({
-              owner,
-              repo,
-              issue_number: number,
-              body: comment,
-            });
 
 
 
