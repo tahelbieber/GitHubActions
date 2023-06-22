@@ -1,1 +1,1 @@
-console.log("Gucci");
+console.log("Gucci the king");
