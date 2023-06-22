@@ -22,9 +22,17 @@ jobs:
 
       - name: Add Comment
         run: |
-          echo 'hi' | gh pr comment ${{ github.event.pull_request.number }}
+          echo '::set-env name=COMMENT_BODY::hi'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Post Comment
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} -b "$COMMENT_BODY"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMENT_BODY: ${{ env.COMMENT_BODY }}
+
 
 
 
