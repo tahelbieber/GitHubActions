@@ -1,4 +1,4 @@
-name: Build and Compile
+name: Build and Compile 
 on:
   pull_request_target:
     types:
@@ -9,13 +9,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 14
+
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Install dependencies
         run: npm install
@@ -23,16 +23,7 @@ jobs:
       - name: Compile software
         run: npx tsc
 
-      - name: Add Comment
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const comment = 'הבראנצ\' עבר קימפול בהצלחה';
-            await github.issues.createComment({
-              ...context.repo,
-              issue_number: context.issue.number,
-              body: comment,
-            });
-
+      - name: Notify on failure
+        if: ${{ failure() }}
+        run: echo "הקמפול נכשל על בראנץ הראשי"
 
