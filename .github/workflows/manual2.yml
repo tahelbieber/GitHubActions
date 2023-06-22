@@ -29,13 +29,14 @@ jobs:
             const { number } = context.issue;
 
             const comment = 'לקבל המשתמש - הערה מתוך קובת YAML';
-            const octokit = github.getOctokit("{{ secrets.GITHUB_TOKEN }}");
-            await octokit.issues.createComment({
+            const github = context.github;
+            await github.issues.createComment({
               owner,
               repo,
               issue_number: number,
               body: comment,
             });
+
 
 
 
