@@ -9,27 +9,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14
-
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Create Environment File
-        run: |
-          echo "COMMENT_BODY=hi" >> $GITHUB_ENV
-
-      - name: Post Comment
-        run: |
-          gh pr comment ${{ github.event.pull_request.number }} -b "$COMMENT_BODY"
+      - name: Add Comment
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COMMENT_BODY: ${{ env.COMMENT_BODY }}
+        run: |
+          COMMENT_BODY="שלום"
+          API_URL="https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments"
+          API_PAYLOAD=$(echo '{}' | jq --arg body "$COMMENT_BODY" '.body = $body')
+          curl -sSL -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" -X POST -d "$API_PAYLOAD" "$API_URL"
+
 
 
 
